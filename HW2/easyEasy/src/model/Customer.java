@@ -1,3 +1,5 @@
+package model;
+
 import java.util.ArrayList;
 
 public class Customer {
@@ -24,7 +26,8 @@ public class Customer {
     }
 
     public void createNewAccount(Bank bank, int money, int duration, int interest){
-
+        Bank bank1 = new Bank(name);
+        bank1.getBankWithName(bank);
     }
 
     public void leaveAccount(int accountId){
