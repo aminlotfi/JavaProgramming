@@ -18,16 +18,21 @@ public class Customer {
     }
 
     public Customer getCustomerByName (String name){
-
+        for (Customer customer :allCustomers) {
+            if (name.equals(customer.getName())) {
+                return customer;
+            }
+        }
+        return null;
     }
 
     public String getName() {
         return name;
     }
 
-    public void createNewAccount(Bank bank, int money, int duration, int interest){
-        Bank bank1 = new Bank(name);
-        bank1.getBankWithName(bank);
+    public void createNewAccount(Bank bank, int money, int duration, int type){
+        Account account = new Account(bank, this.totalNumberOfAccountsCreated, money, this, this, duration);
+
     }
 
     public void leaveAccount(int accountId){
@@ -71,7 +76,12 @@ public class Customer {
     }
 
     public Account getAccountWithId(int id){
-
+        for (int i = 0; i < allActiveAccounts.size(); i++) {
+            if (allActiveAccounts.get(i).getId() == id ){
+                return allActiveAccounts.get(i);
+            }
+        }
+        return null;
     }
 }
 

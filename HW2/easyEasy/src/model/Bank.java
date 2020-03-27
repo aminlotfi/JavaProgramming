@@ -3,11 +3,12 @@ package model;
 import java.util.ArrayList;
 
 public class Bank {
-    public ArrayList<Bank> allBanks;
+    private ArrayList<Bank> allBanks;
     public String name;
 
     public Bank(String name) {
         this.name = name;
+        this.allBanks = new ArrayList<>();
     }
 
     public Bank getBankWithName(String name){
