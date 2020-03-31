@@ -18,7 +18,7 @@ public class Loan {
         this.allLoans = new ArrayList<>();
     }
 
-    public void passMonth(){
+    public static void passMonth(){
 
     }
 

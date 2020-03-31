@@ -3,24 +3,23 @@ package model;
 import java.util.ArrayList;
 
 public class Customer {
-    public ArrayList<Customer> allCustomers;
-    public String name;
-    public double moneyInSafe;
-    public ArrayList<Account> allActiveAccounts;
-    public int totalNumberOfAccountsCreated;
-    public int negativeScore;
+    private String name;
+    private double moneyInSafe;
+    private int totalNumberOfAccountsCreated = 0;
+    private int negativeScore;
+    private static ArrayList<Customer> allCustomers = new ArrayList<>();
+    private ArrayList<Account> allActiveAccounts = new ArrayList<>();
 
     public Customer(String name, double moneyInSafe) {
         this.name = name;
         this.moneyInSafe = moneyInSafe;
-        this.allCustomers = new ArrayList<>();
-        this.allActiveAccounts = new ArrayList<>();
+        allCustomers.add(this);
     }
 
-    public Customer getCustomerByName (String name){
-        for (Customer customer :allCustomers) {
-            if (name.equals(customer.getName())) {
-                return customer;
+    public static Customer getCustomerByName(String name) {
+        for (int i = 0; i < allCustomers.size(); i++) {
+            if (name.equals((allCustomers.get(i)).getName())) {
+                return allCustomers.get(i);
             }
         }
         return null;
@@ -30,17 +29,32 @@ public class Customer {
         return name;
     }
 
-    public void createNewAccount(Bank bank, int money, int duration, int type){
-        Account account = new Account(bank, this.totalNumberOfAccountsCreated, money, this, this, duration);
-
+    
+    public void createNewAccount(Bank bank, int money, int duration, int interest) {
+        this.totalNumberOfAccountsCreated++;
+        Account account = new Account(bank, this.totalNumberOfAccountsCreated + 1,money, interest, this, duration);
+        this.allActiveAccounts.add(account);
+        this.setMoneyInSafe((-1) * (money));
     }
 
-    public void leaveAccount(int accountId){
-
+    public void leaveAccount(int accountId) {
+        Account account = this.getAccountWithId(accountId);
+        if (account == null) {
+            System.out.println("Chizi zadi?!");
+        } else {
+            this.setMoneyInSafe(account.getAmountOfMoneyForLeaving());
+            allActiveAccounts.remove(account);
+            account.deleteAccount(account);
+        }
     }
 
-    public boolean canPayLoan(double amount){
-
+    public boolean canPayLoan(double amount) {
+        if (amount >= this.getMoneyInSafe()) {
+            this.negativeScore++;
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public double getMoneyInSafe() {
@@ -48,40 +62,45 @@ public class Customer {
     }
 
     public void setMoneyInSafe(double moneyInSafe) {
-        this.moneyInSafe = moneyInSafe;
+        this.moneyInSafe += moneyInSafe;
     }
 
-    public void getLoan(int duration, int interest, int money){
-
+    public void getLoan(int duration, int interest, int money) {
+        this.setMoneyInSafe(money);
     }
 
-    public void payLoan(double amount){
-
+    public void payLoan(double amount) {
+        this.setMoneyInSafe(amount);
     }
 
-    public boolean canGetLoan(){
-
+    public boolean canGetLoan() {
+        if (this.getNegativeScore() < 5) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public int getNegativeScore() {
         return negativeScore;
     }
 
-    public void addNegativeScore(){
-
+    public boolean hasActiveAccountInBank(Bank bank) {
+        for (Account allActiveAccount : allActiveAccounts) {
+            if (bank.getName().equals(allActiveAccount.getBank().getName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    public boolean hasActiveAccountInBank(Bank bank){
-
-    }
-
-    public Account getAccountWithId(int id){
-        for (int i = 0; i < allActiveAccounts.size(); i++) {
-            if (allActiveAccounts.get(i).getId() == id ){
-                return allActiveAccounts.get(i);
+    private Account getAccountWithId(int id) {
+        for (Account allActiveAccount : allActiveAccounts) {
+            if (id == allActiveAccount.getId()) {
+                return allActiveAccount;
             }
         }
         return null;
     }
-}
 
+}
