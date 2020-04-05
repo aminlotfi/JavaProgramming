@@ -3,12 +3,12 @@ package model;
 import java.util.ArrayList;
 
 public class Loan {
-    public ArrayList<Loan> allLoans;
-    public Customer customer;
-    public int duration;
-    public int remainingPayments;
-    public int interest;
-    public int amount;
+    private static ArrayList<Loan> allLoans;
+    private Customer customer;
+    private int duration;
+    private int remainingPayments;
+    private int interest;
+    private int amount;
 
     public Loan(Customer customer, int duration, int interest, int amount) {
         this.customer = customer;
@@ -20,13 +20,26 @@ public class Loan {
 
     public static void passMonth(){
 
+        int s = allLoans.size()-1;
+        for (int i = s; i > -1; i--) {
+            allLoans.get(i).duration--;
+            if (allLoans.get(i).duration == 0){
+                allLoans.get(i).passMonthEach();
+            }
+        }
     }
 
-    public double getPaymentAmount(){
-
+    private double getPaymentAmount(){
+        return amount = (amount*(interest/100)+1)/duration;
     }
 
-    public void passMonthEach(){
-
+    private void passMonthEach(){
+        for (int i = 0; i < duration ; i++) {
+            Customer customer = null;
+            customer.payLoan(amount);
+        }
+        if (customer.canPayLoan(amount)){
+            customer.setMoneyInSafe(amount * (-1));
+        }
     }
 }

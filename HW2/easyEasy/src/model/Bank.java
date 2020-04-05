@@ -3,15 +3,17 @@ package model;
 import java.util.ArrayList;
 
 public class Bank {
-    private ArrayList<Bank> allBanks;
-    public String name;
+    private static int interests;
+    private static ArrayList<Bank> allBanks;
+    private String name;
 
     public Bank(String name) {
         this.name = name;
         this.allBanks = new ArrayList<>();
+        allBanks.add(this);
     }
 
-    public Bank getBankWithName(String name){
+    public static Bank getBankWithName(String name){
         for (Bank bank :allBanks) {
             if (name.equals(bank.getName())) {
                 return bank;
@@ -20,7 +22,7 @@ public class Bank {
         return null;
     }
 
-    public boolean isThereBankWithName (String name){
+    public static boolean isThereBankWithName (String name){
         for (Bank bank :allBanks) {
             if (name.equals(bank.getName())) {
                 return true;

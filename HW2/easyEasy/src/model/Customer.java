@@ -6,7 +6,7 @@ public class Customer {
     private String name;
     private double moneyInSafe;
     private int totalNumberOfAccountsCreated = 0;
-    private int negativeScore;
+    private int negativeScore = 0;
     private static ArrayList<Customer> allCustomers = new ArrayList<>();
     private ArrayList<Account> allActiveAccounts = new ArrayList<>();
 
@@ -29,7 +29,6 @@ public class Customer {
         return name;
     }
 
-    
     public void createNewAccount(Bank bank, int money, int duration, int interest) {
         this.totalNumberOfAccountsCreated++;
         Account account = new Account(bank, this.totalNumberOfAccountsCreated + 1,money, interest, this, duration);
@@ -44,7 +43,7 @@ public class Customer {
         } else {
             this.setMoneyInSafe(account.getAmountOfMoneyForLeaving());
             allActiveAccounts.remove(account);
-            account.deleteAccount(account);
+            Account.deleteAccount(account);
         }
     }
 

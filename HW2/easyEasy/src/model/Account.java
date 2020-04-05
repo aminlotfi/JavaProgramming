@@ -3,13 +3,13 @@ package model;
 import java.util.ArrayList;
 
 public class Account {
-    public ArrayList<Account> allAccounts;
-    public Bank bank;
+    private static ArrayList<Account> allAccounts;
+    private Bank bank;
     private int id;
-    public int money;
-    public int remainingDuration;
+    private int money;
+    private int remainingDuration;
     private int interest;
-    public Customer customer;
+    private Customer customer;
 
     public Account(Bank bank, int id, int money, int interest, Customer customer, int remainingDuration) {
         this.bank = bank;
@@ -21,22 +21,19 @@ public class Account {
         this.allAccounts = new ArrayList<>();
     }
 
-    public void passMonth(){
-        int s = allAccounts.size()-1;
-        for (int i = s; i > -1; i--) {
-            allAccounts.get(i).remainingDuration--;
-            if (allAccounts.get(i).remainingDuration == 0){
-                allAccounts.get(i).passMonthEach();
+    public static void passMonth(){
+        ArrayList<Account> s = new ArrayList<>();
+        for (Account account : allAccounts){
+            if (account.remainingDuration == 0){
+                s.add(account);
             }
+            account.passMonthEach();
         }
+        allAccounts.removeAll(s);
     }
 
-    public void deleteAccount(Account account){
-        for (int i = 0; i<allAccounts.size(); i++){
-            if (allAccounts.get(i) == account){
-                allAccounts.remove(account);
-            }
-        }
+    public static void deleteAccount(Account account){
+        allAccounts.remove(account);
     }
 
     public int getId() {
@@ -47,14 +44,18 @@ public class Account {
         if (remainingDuration > 0){
             return this.money;
         }
-        return this.money += interest;
+        return this.money *= ((interest/100)+1);
     }
 
     public Bank getBank() {
         return bank;
     }
 
-    public void passMonthEach(){
-
+    private void passMonthEach(){
+        if (remainingDuration > 0){
+            remainingDuration--;
+        } else if (remainingDuration == 0){
+            Customer.getCustomerByName(customer.getName()).leaveAccount(id);
+        }
     }
 }
