@@ -11,6 +11,8 @@ public class Customer {
     public Customer(String name, double moneyInSafe) {
         this.name = name;
         this.moneyInSafe = moneyInSafe;
+        totalNumberOfAccountsCreated = 1;
+        negativeScore = 0;
         allCustomers.add(this);
     }
 
@@ -28,10 +30,10 @@ public class Customer {
     }
 
     public void createNewAccount(Bank bank, int money, int duration, int interest) {
-        this.totalNumberOfAccountsCreated++;
-        Account account = new Account(bank, this.totalNumberOfAccountsCreated + 1,money, interest, this, duration);
+        Account account = new Account(bank, this.totalNumberOfAccountsCreated++,money, interest, this, duration);
         this.allActiveAccounts.add(account);
         this.setMoneyInSafe((-1) * (money));
+
     }
 
     public void leaveAccount(int accountId) {
@@ -46,7 +48,7 @@ public class Customer {
     }
 
     public boolean canPayLoan(double amount) {
-        if (amount >= this.getMoneyInSafe()) {
+        if (amount > this.getMoneyInSafe()) {
             this.negativeScore++;
             return false;
         } else {

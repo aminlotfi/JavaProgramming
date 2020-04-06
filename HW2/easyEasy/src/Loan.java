@@ -13,6 +13,7 @@ public class Loan {
         this.duration = duration;
         this.interest = interest;
         this.amount = amount;
+        remainingPayments=duration;
         allLoans.add(this);
     }
 
