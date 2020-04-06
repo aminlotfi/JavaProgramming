@@ -1,9 +1,7 @@
-package model;
-
 import java.util.ArrayList;
 
 public class Account {
-    private static ArrayList<Account> allAccounts;
+    private static ArrayList<Account> allAccounts = new ArrayList<>();
     private Bank bank;
     private int id;
     private int money;
@@ -18,18 +16,21 @@ public class Account {
         this.interest = interest;
         this.customer = customer;
         this.remainingDuration = remainingDuration;
-        this.allAccounts = new ArrayList<>();
+        allAccounts.add(this);
     }
 
     public static void passMonth(){
         ArrayList<Account> s = new ArrayList<>();
         for (Account account : allAccounts){
-            if (account.remainingDuration == 0){
+            if (account.remainingDuration == 1){
                 s.add(account);
+            } else {
+                account.passMonthEach();
             }
+        }
+        for (Account account : s) {
             account.passMonthEach();
         }
-        allAccounts.removeAll(s);
     }
 
     public static void deleteAccount(Account account){
@@ -41,10 +42,11 @@ public class Account {
     }
 
     public double getAmountOfMoneyForLeaving(){
-        if (remainingDuration > 0){
-            return this.money;
+        if (remainingDuration == 0){
+            double moneyDouble = (((double) interest) / 100) + 1;
+            return (moneyDouble) * (double) money;
         }
-        return this.money *= ((interest/100)+1);
+        return money;
     }
 
     public Bank getBank() {
@@ -54,8 +56,11 @@ public class Account {
     private void passMonthEach(){
         if (remainingDuration > 0){
             remainingDuration--;
-        } else if (remainingDuration == 0){
+        }
+        if (remainingDuration == 0){
             Customer.getCustomerByName(customer.getName()).leaveAccount(id);
+            allAccounts.remove(this);
+            remainingDuration--;
         }
     }
 }

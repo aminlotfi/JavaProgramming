@@ -1,5 +1,3 @@
-package model;
-
 import java.util.ArrayList;
 
 public class Customer {
@@ -65,6 +63,7 @@ public class Customer {
     }
 
     public void getLoan(int duration, int interest, int money) {
+        Loan loan = new Loan(this, duration, interest, money);
         this.setMoneyInSafe(money);
     }
 
@@ -101,5 +100,4 @@ public class Customer {
         }
         return null;
     }
-
 }
